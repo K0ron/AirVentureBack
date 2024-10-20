@@ -5,6 +5,11 @@ import java.util.*;
 
 import org.hibernate.type.descriptor.java.BigDecimalJavaType;
 
+import com.keca.AirVentureBack.activity.domain.entity.Activity;
+import com.keca.AirVentureBack.user.domain.entity.User;
+
+@Entity
+@Table(name = "final_reservation")
 public class FinalReservation {
 
     @Id
@@ -20,8 +25,23 @@ public class FinalReservation {
     @Column(name = "total_price", nullable = false)
     private BigDecimalJavaType totalPrice;
 
+    @ManyToMany(mappedBy = "finalReservations")
+    private Set<User> users = new HashSet<>();
+
+    @ManyToMany(mappedBy = "finalReservations")
+    private Set<Activity> activities = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public enum Status {
+
+        PENDING,
+        PAID,
+        CANCELLED,
+        EXPIRED
+
+    }
 
     public UUID getId() {
         return id;
@@ -53,14 +73,6 @@ public class FinalReservation {
 
     public void setTotalPrice(BigDecimalJavaType totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 
 }

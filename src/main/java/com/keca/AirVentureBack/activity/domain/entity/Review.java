@@ -7,7 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.*;
 import java.util.*;
 
-public class Post {
+import com.keca.AirVentureBack.user.domain.entity.User;
+
+@Entity
+@Table(name = "review")
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -21,6 +25,14 @@ public class Post {
 
     @Column(name = "created_at", nullable = false)
     private Date createdAt = new Date();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
 
     public UUID getId() {
         return id;

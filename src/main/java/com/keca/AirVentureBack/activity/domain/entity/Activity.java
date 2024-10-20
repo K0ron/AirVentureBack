@@ -3,6 +3,11 @@ package com.keca.AirVentureBack.activity.domain.entity;
 import jakarta.persistence.*;
 import java.util.*;
 
+import com.keca.AirVentureBack.reservation.domain.entity.FinalReservation;
+import com.keca.AirVentureBack.reservation.domain.entity.PreReservation;
+
+@Entity
+@Table(name = "activity")
 public class Activity {
 
     @Id
@@ -32,6 +37,26 @@ public class Activity {
 
     @Column(name = "max_participants", nullable = false)
     private Integer maxParticipants;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    @ManyToMany
+    @JoinTable(name = "activity_pre_reservation", joinColumns = @JoinColumn(name = "activity_id"), inverseJoinColumns = @JoinColumn(name = "pre_reservation_id"))
+    private Set<PreReservation> preReservations = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "activity_final_reservation", joinColumns = @JoinColumn(name = "activity_id"), inverseJoinColumns = @JoinColumn(name = "final_reservation_id"))
+    private Set<FinalReservation> finalReservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "activity")
+    private Set<Review> reviews = new HashSet<>();
+
+    public enum Category {
+        SPORT,
+        EXTERIEUR,
+        DECOUVERTE
+    }
 
     public UUID getId() {
         return id;

@@ -1,8 +1,17 @@
 package com.keca.AirVentureBack.user.domain.entity;
 
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
+import com.keca.AirVentureBack.activity.domain.entity.Review;
+import com.keca.AirVentureBack.reservation.domain.entity.FinalReservation;
+import com.keca.AirVentureBack.reservation.domain.entity.PreReservation;
+
+@Entity
+@Table(name = "user")
 public class User {
 
     @Id
@@ -23,6 +32,22 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToMany
+    @JoinTable(name = "user_pre_reservation", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "pre_reservation_id"))
+    private Set<PreReservation> preReservations = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_final_reservation", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "final_reservation_id"))
+    private Set<FinalReservation> finalReservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Review> reviews = new HashSet<>();
+
+    public enum Role {
+        PROFESIONAL,
+        PARTICULAR
+    }
 
     public UUID getId() {
         return id;
