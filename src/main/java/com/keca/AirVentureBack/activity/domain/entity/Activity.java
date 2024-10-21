@@ -32,6 +32,9 @@ public class Activity {
     @Column(name = "zip_code", nullable = false)
     private String zipCode;
 
+    @Column(name = "price", nullable = false)
+    private Integer price;
+
     // @Column(name = "picture", nullable = false)
     // private String picture;
 
@@ -56,6 +59,46 @@ public class Activity {
         SPORT,
         EXTERIEUR,
         DECOUVERTE
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Set<PreReservation> getPreReservations() {
+        return preReservations;
+    }
+
+    public void setPreReservations(Set<PreReservation> preReservations) {
+        this.preReservations = preReservations;
+    }
+
+    public Set<FinalReservation> getFinalReservations() {
+        return finalReservations;
+    }
+
+    public void setFinalReservations(Set<FinalReservation> finalReservations) {
+        this.finalReservations = finalReservations;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public UUID getId() {

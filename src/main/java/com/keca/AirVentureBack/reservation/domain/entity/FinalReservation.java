@@ -5,8 +5,8 @@ import java.util.*;
 
 import org.hibernate.type.descriptor.java.BigDecimalJavaType;
 
-import com.keca.AirVentureBack.activity.domain.entity.Activity;
 import com.keca.AirVentureBack.user.domain.entity.User;
+import com.keca.AirVentureBack.activity.domain.entity.Activity;
 
 @Entity
 @Table(name = "final_reservation")
@@ -19,11 +19,11 @@ public class FinalReservation {
     @Column(name = "reserved_at", nullable = false)
     private Date reservedAt = new Date();
 
-    @Column(name = "expiration_date", nullable = false)
-    private Date expirationDate;
-
     @Column(name = "total_price", nullable = false)
     private BigDecimalJavaType totalPrice;
+
+    @Column(name = "payement_date", nullable = false)
+    private Date payementDate = new Date();
 
     @ManyToMany(mappedBy = "finalReservations")
     private Set<User> users = new HashSet<>();
@@ -36,10 +36,8 @@ public class FinalReservation {
 
     public enum Status {
 
-        PENDING,
         PAID,
         CANCELLED,
-        EXPIRED
 
     }
 
@@ -59,20 +57,44 @@ public class FinalReservation {
         this.reservedAt = reservedAt;
     }
 
-    public Date getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
     public BigDecimalJavaType getTotalPrice() {
         return totalPrice;
     }
 
     public void setTotalPrice(BigDecimalJavaType totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Date getPayementDate() {
+        return payementDate;
+    }
+
+    public void setPayementDate(Date payementDate) {
+        this.payementDate = payementDate;
     }
 
 }

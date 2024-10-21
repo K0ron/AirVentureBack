@@ -38,7 +38,6 @@ public class PreReservation {
     public enum Status {
 
         PENDING,
-        PAID,
         CANCELLED,
         EXPIRED
 
@@ -74,6 +73,30 @@ public class PreReservation {
 
     public void setTotalPrice(BigDecimalJavaType totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
     }
 
 }
