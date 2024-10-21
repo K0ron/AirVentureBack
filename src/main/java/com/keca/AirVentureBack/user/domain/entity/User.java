@@ -97,4 +97,28 @@ public class User {
         this.role = role;
     }
 
+    public Set<PreReservation> getPreReservations() {
+        return preReservations;
+    }
+
+    public void setPreReservations(Set<PreReservation> preReservations) {
+        this.preReservations = preReservations;
+    }
+
+    public Set<FinalReservation> getFinalReservations() {
+        return finalReservations;
+    }
+
+    public void setFinalReservations(Set<FinalReservation> finalReservations) {
+        this.finalReservations = finalReservations;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
 }
