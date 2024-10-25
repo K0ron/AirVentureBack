@@ -16,19 +16,19 @@ public class ReviewService {
         this.reviewRepository = reviewRepository;
     }
 
-    public List<Review> getReviewsByActivityId(UUID activityId) {
+    public List<Review> getReviewsByActivityId(Long activityId) {
         return reviewRepository.findByActivityId(activityId);
     }
 
-    public List<Review> getReviewsByUserId(UUID userId) {
-        return reviewRepository.findByUserId(userId);
+    public List<Review> getReviewsByUsersId(Long usersId) {
+        return reviewRepository.findByUsersId(usersId);
     }
 
     public Review createReview(Review newReview) {
         return reviewRepository.save(newReview);
     }
 
-    public Review updateReview(Review updateReview, UUID id) {
+    public Review updateReview(Review updateReview, Long id) {
         return reviewRepository.findById(id)
                 .map(review -> {
                     review.setTitle(updateReview.getTitle());
@@ -39,7 +39,7 @@ public class ReviewService {
 
     }
 
-    public void deleteReview(UUID id) {
+    public void deleteReview(Long id) {
         reviewRepository.deleteById(id);
     }
 

@@ -4,7 +4,6 @@ import com.keca.AirVentureBack.activity.domain.entity.Activity;
 import com.keca.AirVentureBack.activity.domain.service.ActivityService;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,7 @@ public class ActivityController {
     }
 
     @GetMapping("/activity/{id}")
-    Activity getOne(@PathVariable UUID id) {
+    Activity getOne(@PathVariable Long id) {
         return activityService.getOneActivity(id);
     }
 
@@ -38,12 +37,12 @@ public class ActivityController {
     }
 
     @PutMapping("activity/{id}")
-    Activity update(@RequestBody Activity newActivity, @PathVariable UUID id) {
+    Activity update(@RequestBody Activity newActivity, @PathVariable Long id) {
         return activityService.updateActivity(newActivity, id);
     }
 
     @DeleteMapping("/activity/{id}")
-    void delete(@PathVariable UUID id) {
+    void delete(@PathVariable Long id) {
         activityService.deleteActivity(id);
     }
 

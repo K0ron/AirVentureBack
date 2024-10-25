@@ -1,7 +1,6 @@
 package com.keca.AirVentureBack.reservation.application;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class PreReservationController {
     }
 
     @GetMapping("/preReservation/{id}")
-    PreReservation gerOnePreReservation(@PathVariable UUID id) {
+    PreReservation gerOnePreReservation(@PathVariable Long id) {
         return preReservationService.getOnePreReservation(id);
     }
 
@@ -38,12 +37,12 @@ public class PreReservationController {
     }
 
     @PutMapping("/preReservation/{id}")
-    PreReservation updatePreReservation(@RequestBody PreReservation updatePreReservation, @PathVariable UUID id) {
+    PreReservation updatePreReservation(@RequestBody PreReservation updatePreReservation, @PathVariable Long id) {
         return preReservationService.updatePreReservation(updatePreReservation, id);
     }
 
     @DeleteMapping("/preReservation/{id}")
-    public void deletePreReservation(@PathVariable UUID id) {
+    public void deletePreReservation(@PathVariable Long id) {
         preReservationService.deletePreReservation(id);
     }
 
