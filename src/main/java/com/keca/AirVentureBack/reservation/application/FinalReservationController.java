@@ -1,7 +1,6 @@
 package com.keca.AirVentureBack.reservation.application;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class FinalReservationController {
     }
 
     @GetMapping("/finalReservation/{id}")
-    FinalReservation getOneFinalReservation(@PathVariable UUID id) {
+    FinalReservation getOneFinalReservation(@PathVariable Long id) {
         return finalReservationService.getOneFinalReservation(id);
     }
 
@@ -40,12 +39,12 @@ public class FinalReservationController {
 
     @PutMapping("/finalReservation/{id}")
     FinalReservation updateFinalReservation(@RequestBody FinalReservation updateFinalReservation,
-            @PathVariable UUID id) {
+            @PathVariable Long id) {
         return finalReservationService.updateFinalReservation(updateFinalReservation, id);
     }
 
     @DeleteMapping("/finalReservation/{id}")
-    void deleteFinalReservation(@PathVariable UUID id) {
+    void deleteFinalReservation(@PathVariable Long id) {
         finalReservationService.deleteFinalReservation(id);
     }
 

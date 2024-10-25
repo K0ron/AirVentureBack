@@ -1,7 +1,6 @@
 package com.keca.AirVentureBack.activity.domain.service;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ public class ActivityService {
         return activityRepository.findAll();
     }
 
-    public Activity getOneActivity(UUID id) {
+    public Activity getOneActivity(Long id) {
         return activityRepository.findById(id).orElseThrow();
     }
 
@@ -29,7 +28,7 @@ public class ActivityService {
         return activityRepository.save(newActivity);
     }
 
-    public Activity updateActivity(Activity newActivity, UUID id) {
+    public Activity updateActivity(Activity newActivity, Long id) {
         return activityRepository.findById(id)
                 .map(activity -> {
                     activity.setName(newActivity.getName());
@@ -44,7 +43,7 @@ public class ActivityService {
                 .orElseThrow();
     }
 
-    public void deleteActivity(UUID id) {
+    public void deleteActivity(Long id) {
         activityRepository.deleteById(id);
     }
 

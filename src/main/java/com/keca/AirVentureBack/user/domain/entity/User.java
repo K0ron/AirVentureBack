@@ -4,19 +4,18 @@ import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import com.keca.AirVentureBack.activity.domain.entity.Review;
 import com.keca.AirVentureBack.reservation.domain.entity.FinalReservation;
 import com.keca.AirVentureBack.reservation.domain.entity.PreReservation;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -34,14 +33,14 @@ public class User {
     private Role role;
 
     @ManyToMany
-    @JoinTable(name = "user_pre_reservation", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "pre_reservation_id"))
+    @JoinTable(name = "users_pre_reservation", joinColumns = @JoinColumn(name = "users_id"), inverseJoinColumns = @JoinColumn(name = "pre_reservation_id"))
     private Set<PreReservation> preReservations = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(name = "user_final_reservation", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "final_reservation_id"))
+    @JoinTable(name = "users_final_reservation", joinColumns = @JoinColumn(name = "users_id"), inverseJoinColumns = @JoinColumn(name = "final_reservation_id"))
     private Set<FinalReservation> finalReservations = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private Set<Review> reviews = new HashSet<>();
 
     public enum Role {
@@ -49,11 +48,11 @@ public class User {
         PARTICULAR
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

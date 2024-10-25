@@ -14,8 +14,8 @@ import com.keca.AirVentureBack.user.domain.entity.User;
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -27,18 +27,18 @@ public class Review {
     private Date createdAt = new Date();
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "users_id")
+    private User users;
 
     @ManyToOne
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,11 +67,11 @@ public class Review {
     }
 
     public User getUser() {
-        return user;
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(User users) {
+        this.users = users;
     }
 
     public Activity getActivity() {

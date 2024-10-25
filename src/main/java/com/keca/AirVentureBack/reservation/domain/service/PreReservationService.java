@@ -1,7 +1,6 @@
 package com.keca.AirVentureBack.reservation.domain.service;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class PreReservationService {
         return preReservationRepository.findAll();
     }
 
-    public PreReservation getOnePreReservation(UUID id) {
+    public PreReservation getOnePreReservation(Long id) {
         return preReservationRepository.findById(id)
                 .orElseThrow();
     }
@@ -29,7 +28,7 @@ public class PreReservationService {
         return preReservationRepository.save(newPreReservation);
     }
 
-    public PreReservation updatePreReservation(PreReservation updatePreReservation, UUID id) {
+    public PreReservation updatePreReservation(PreReservation updatePreReservation, Long id) {
         return preReservationRepository.findById(id)
                 .map(preReservation -> {
                     preReservation.setReservedAt(updatePreReservation.getReservedAt());
@@ -42,7 +41,7 @@ public class PreReservationService {
                 .orElseThrow();
     }
 
-    public void deletePreReservation(UUID id) {
+    public void deletePreReservation(Long id) {
         preReservationRepository.deleteById(id);
     }
 

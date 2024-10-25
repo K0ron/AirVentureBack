@@ -1,7 +1,6 @@
 package com.keca.AirVentureBack.reservation.domain.service;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ public class FinalReservationService {
         return finalReservationRepository.findAll();
     }
 
-    public FinalReservation getOneFinalReservation(UUID id) {
+    public FinalReservation getOneFinalReservation(Long id) {
         return finalReservationRepository.findById(id)
                 .orElseThrow();
     }
@@ -32,7 +31,7 @@ public class FinalReservationService {
 
     }
 
-    public FinalReservation updateFinalReservation(FinalReservation updateFinalReservation, UUID id) {
+    public FinalReservation updateFinalReservation(FinalReservation updateFinalReservation, Long id) {
         return finalReservationRepository.findById(id)
                 .map(finalReservation -> {
                     finalReservation.setPayementDate(updateFinalReservation.getPayementDate());
@@ -44,7 +43,7 @@ public class FinalReservationService {
                 .orElseThrow();
     }
 
-    public void deleteFinalReservation(UUID id) {
+    public void deleteFinalReservation(Long id) {
         finalReservationRepository.deleteById(id);
     }
 
