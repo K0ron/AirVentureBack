@@ -27,7 +27,7 @@ public class PreReservationController {
         return preReservationService.getOnePreReservation(id);
     }
 
-    @PostMapping("/preReservation/{id}")
+    @PostMapping("/preReservation")
     public ResponseEntity<?> createPreReservation(@RequestBody PreReservation newPreReservation) throws Exception {
         try {
             return ResponseEntity.ok().body(preReservationService.createPreReservation(newPreReservation));
