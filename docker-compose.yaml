@@ -1,0 +1,26 @@
+services:
+  air-venture-db:
+    container_name: air-venture-db
+    image: mysql
+    env_file:
+      - .env
+    ports:
+      - "3307:3306"
+    volumes:
+      - air-venture-db:/var/lib/mysql
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - air-venture-db
+    volumes:
+      - .:/app
+      - ~/.m2:/root/.m2
+
+volumes:
+  air-venture-db:
