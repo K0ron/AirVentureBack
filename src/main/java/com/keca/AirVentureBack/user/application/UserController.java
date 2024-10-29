@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.keca.AirVentureBack.user.domain.entity.User;
 import com.keca.AirVentureBack.user.domain.service.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class UserController {
