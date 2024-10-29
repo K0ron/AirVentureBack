@@ -58,6 +58,10 @@ public class UserService {
                     }
 
                     String newPassword = userPasswordChangeDTO.getNewPassword();
+                    if (!isPasswordValid(newPassword)) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                                "Password does not meet complexity requierments");
+                    }
                     String hasedPassword = userRegisterService.generateHashedPassword(newPassword);
                     user.setPassword(hasedPassword);
                     return userRepository.save(user);
@@ -65,6 +69,11 @@ public class UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                         "Internal error, password was not changed"));
 
+    }
+
+    private boolean isPasswordValid(String password) {
+        String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,}$";
+        return password.matches(passwordPattern);
     }
 
 }
