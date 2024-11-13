@@ -27,7 +27,7 @@ public class JwtTokenService {
 
     public Token generateToken(UserDetails userDetails) {
         Date now = new Date();
-        Token token = new Token();
+        Token token = new Token(secretKey);
         token.setToken(Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
