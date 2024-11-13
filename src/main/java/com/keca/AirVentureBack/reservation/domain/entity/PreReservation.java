@@ -1,8 +1,7 @@
 package com.keca.AirVentureBack.reservation.domain.entity;
 
+import java.math.BigDecimal;
 import java.util.*;
-
-import org.hibernate.type.descriptor.java.BigDecimalJavaType;
 
 import com.keca.AirVentureBack.activity.domain.entity.Activity;
 import com.keca.AirVentureBack.user.domain.entity.User;
@@ -24,7 +23,7 @@ public class PreReservation {
     private Date expirationDate;
 
     @Column(name = "total_price", nullable = false)
-    private BigDecimalJavaType totalPrice;
+    private BigDecimal totalPrice;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -67,11 +66,11 @@ public class PreReservation {
         this.expirationDate = expirationDate;
     }
 
-    public BigDecimalJavaType getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(BigDecimalJavaType totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 

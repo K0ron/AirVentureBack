@@ -2,8 +2,13 @@ package com.keca.AirVentureBack.user.domain.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.keca.AirVentureBack.activity.domain.entity.Review;
 import com.keca.AirVentureBack.reservation.domain.entity.FinalReservation;
@@ -11,7 +16,7 @@ import com.keca.AirVentureBack.reservation.domain.entity.PreReservation;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +50,16 @@ public class User {
 
     public enum Role {
         PROFESIONAL,
-        PARTICULAR
+        PARTICULAR,
+        ADMIN
+    }
+
+    public User() {
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     public Long getId() {
@@ -118,6 +132,36 @@ public class User {
 
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Set.of(new SimpleGrantedAuthority(role.name())); // Retourne les rôles en tant qu'autorités
+    }
+
+    @Override
+    public String getUsername() {
+        return email; // Utilisé comme nom d'utilisateur
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // Modifiez si vous avez une logique d'expiration
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // Modifiez si vous avez une logique de verrouillage
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Modifiez si vous avez une logique d'expiration des identifiants
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Modifiez si vous avez une logique pour désactiver les comptes
     }
 
 }
