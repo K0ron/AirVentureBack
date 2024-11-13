@@ -42,4 +42,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/air_venture_back:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/air_venture:latest
