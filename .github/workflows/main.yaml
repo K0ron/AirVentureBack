@@ -9,14 +9,15 @@ jobs:
   build-deploy:
     name: build and deploy
     runs-on: ubuntu-latest
-    env:
-      SPRING_DATASOURCE_URL: jdbc:h2:mem:air_venture_test
-      SPRING_DATASOURCE_USERNAME: "sa"
-      SPRING_DATASOURCE_PASSWORD: "password"
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Load environment variables from .env
+        uses: c-py/action-dotenv-to-setenv@v5
+        with:
+          env-file: .env
       - uses: actions/setup-java@v4
         with:
           distribution: "corretto"
@@ -41,4 +42,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/air_venture:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/air_venture_back:latest
