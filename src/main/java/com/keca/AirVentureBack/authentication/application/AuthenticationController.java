@@ -49,7 +49,11 @@ public class AuthenticationController {
                     .body(userBodyDTO); // cette ligne renvoie le DTO dans le body
             /* .build(); */
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid email or password");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occured durieng authentication");
         }
     }
 

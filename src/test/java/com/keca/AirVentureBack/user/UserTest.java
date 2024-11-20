@@ -5,8 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +17,9 @@ import com.keca.AirVentureBack.reservation.domain.entity.FinalReservation;
 import com.keca.AirVentureBack.reservation.domain.entity.PreReservation;
 import com.keca.AirVentureBack.user.domain.entity.User;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class UserTest {
 
     private User user;

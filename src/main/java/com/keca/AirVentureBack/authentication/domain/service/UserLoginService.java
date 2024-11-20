@@ -2,6 +2,9 @@ package com.keca.AirVentureBack.authentication.domain.service;
 
 import com.keca.AirVentureBack.authentication.infrastructure.repository.UserRepository;
 import com.keca.AirVentureBack.user.domain.entity.User;
+
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,7 @@ public class UserLoginService {
     // return user;
     // }
     public User login(User user) {
+
         // Vérifiez si l'utilisateur passé en paramètre est null
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
@@ -41,12 +45,12 @@ public class UserLoginService {
 
         // Vérifiez si l'utilisateur existe
         if (userEntity == null) {
-            throw new RuntimeException("User not found with email: " + user.getEmail());
+            throw new BadCredentialsException("Invalid credentials");
         }
 
         // Vérifiez le mot de passe
         if (!verifyHashedPasswordDuringLogin(user.getPassword(), userEntity.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new BadCredentialsException("Invalid credentials");
         }
 
         // Mettez à jour les informations de l'utilisateur
@@ -66,7 +70,7 @@ public class UserLoginService {
         try {
             return userRepository.findByEmail(email);
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new UsernameNotFoundException("User not found with email: " + email, e);
         }
     }
 }
