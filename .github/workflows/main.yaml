@@ -16,9 +16,9 @@ jobs:
 
       - name: Load environment variables from .env
         env:
-          SPRING_DATASOURCE_URL: ${SPRING_TEST_DATASOURCE_URL}
-          SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-          SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+          SPRING_DATASOURCE_URL: "jdbc:mysql://127.0.0.1:3306/air_venture_db_test"
+          SPRING_DATASOURCE_USERNAME: "root"
+          SPRING_DATASOURCE_PASSWORD: "surf"
         run: echo "Environment variables set for testing"
 
       - uses: actions/setup-java@v4
