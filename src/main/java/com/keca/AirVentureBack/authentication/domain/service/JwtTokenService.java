@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +54,11 @@ public class JwtTokenService {
     }
 
     private Claims getAllClaimsFromToken(String token) {
+
+        if (token == null || token.trim().isEmpty()) {
+            throw new IllegalArgumentException("Token is null or empty");
+        }
+
         Key signIngKey = getSignInKey();
         return Jwts
                 .parserBuilder()
@@ -71,7 +77,13 @@ public class JwtTokenService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
+        if (token == null || token.trim().isEmpty()) {
+            return false;
+        }
+
         final String email = getEmailFromToken(token);
         return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+
     }
+
 }
