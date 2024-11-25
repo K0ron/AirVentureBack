@@ -27,8 +27,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
 
-                        // .anyRequest().permitAll()
-                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/login", "/register", "/logged-out").permitAll()
                         .requestMatchers("/v3/api-docs",
                                 "/swagger-resources/**",
                                 "/swagger-ui/index.html",
@@ -40,19 +39,15 @@ public class SecurityConfig {
                 // "avatar/**").authenticated()
 
                 )
-                /*
-                 * .logout(logout ->
-                 * logout
-                 * .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                 * .logoutSuccessUrl("/login")
-                 * .invalidateHttpSession(true)
-                 * .deleteCookies("token")
-                 * .permitAll()
-                 * 
-                 * )
-                 */
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/logged-out")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("token")
+                        .permitAll())
+
                 .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // withHttpOnlyTrue()
-                        .ignoringRequestMatchers("/register", "/login")
+                        .ignoringRequestMatchers("/register", "/login", "/logged-out")
                         .disable() // Décommentez pour désactiver en entier la protection CSRF en développement
                 )
                 .sessionManagement(session -> session

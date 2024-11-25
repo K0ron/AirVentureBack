@@ -10,7 +10,10 @@ import com.keca.AirVentureBack.user.domain.entity.User;
 
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class AuthenticationController {
@@ -30,11 +33,18 @@ public class AuthenticationController {
         this.userDetailsService = userDetailsService;
     }
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody User userBody) throws Exception {
+        logger.info("Loggin attemp for email: {}", userBody.getEmail());
+
         try {
             userLoginService.login(userBody);
+            logger.info("Authentication successful for email: {}", userBody.getEmail()); // Étape 2
             Token token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getEmail()));
+            logger.info("JWT generated for email: {}", userBody.getEmail()); // Étape 3
+            logger.debug("JWT content: {}", token.getToken()); // Debug pour voir le contenu
             User user = userLoginService.getUserEntityByEmail(userBody.getEmail());
             ResponseCookie jwtCookie = ResponseCookie.from("token", token.getToken())
                     .httpOnly(true)
@@ -42,8 +52,10 @@ public class AuthenticationController {
                     .maxAge(60 * 60)
                     .sameSite("Strict")
                     .build();
+            logger.info("JWT cookie created for email: {}", userBody.getEmail()); // Étape 4
             UserIdDTO userBodyDTO = new UserIdDTO();
             userBodyDTO.setId(user.getId());
+            logger.info("Login response ready for email: {}", userBody.getEmail()); // Étape 5
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                     .body(userBodyDTO); // cette ligne renvoie le DTO dans le body
@@ -66,20 +78,11 @@ public class AuthenticationController {
         }
     }
 
-    /*
-     * @PostMapping("/logout")
-     * public String logout(HttpServletResponse response, @CookieValue(name =
-     * "token", required = false) Cookie cookie) {
-     * if (cookie != null) {
-     * ResponseCookie deleteCookie = ResponseCookie.from("token", "")
-     * .httpOnly(true)
-     * .path("/")
-     * .maxAge(0)
-     * .sameSite("Strict")
-     * .build();
-     * response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
-     * }
-     * return "redirect:/login";
-     * }
-     */
+    @GetMapping("/logged-out")
+    public String loggedOut(Model model) {
+        model.addAttribute("logout", "You logged out!");
+        return "Logged out 👌🏽";
+
+    }
+
 }
