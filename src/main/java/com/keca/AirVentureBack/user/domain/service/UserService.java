@@ -76,4 +76,18 @@ public class UserService {
         return password.matches(passwordPattern);
     }
 
+    public void addProfilePicture(Long userId, String pictureUrl) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setProfilePicture(pictureUrl);
+
+        userRepository.save(user);
+    }
+
+    public String getProfilePicture(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        return user.getProfilePicture();
+    }
+
 }

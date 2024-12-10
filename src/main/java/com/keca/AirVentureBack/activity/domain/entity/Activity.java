@@ -35,8 +35,9 @@ public class Activity {
     @Column(name = "price", nullable = false)
     private Integer price;
 
-    // @Column(name = "picture", nullable = false)
-    // private String picture;
+    @ElementCollection
+    @CollectionTable(name = "activity_pictures", joinColumns = @JoinColumn(name = "activity_id"))
+    private List<String> pictures = new ArrayList<>();
 
     @Column(name = "max_participants", nullable = false)
     private Integer maxParticipants;
@@ -163,6 +164,14 @@ public class Activity {
 
     public void setMaxParticipants(Integer maxParticipants) {
         this.maxParticipants = maxParticipants;
+    }
+
+    public List<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<String> pictures) {
+        this.pictures = pictures;
     }
 
 }

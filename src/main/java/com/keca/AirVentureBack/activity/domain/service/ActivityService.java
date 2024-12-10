@@ -47,4 +47,21 @@ public class ActivityService {
         activityRepository.deleteById(id);
     }
 
+
+    public void addActivityPictures(Long activityId, List<String> pictureUrls) {
+        Activity activity = activityRepository.findById(activityId)
+            .orElseThrow(() -> new RuntimeException("Activity not found"));
+    
+        activity.getPictures().addAll(pictureUrls); // Ajout des URLs
+        activityRepository.save(activity); // Sauvegarde
+    }
+
+    public List<String> getActivityPictures(Long activityId) {
+        Activity activity = activityRepository.findById(activityId)
+            .orElseThrow(() -> new RuntimeException("Activity not found"));
+    
+        return activity.getPictures(); // Récupère les URLs
+    }
+    
+
 }

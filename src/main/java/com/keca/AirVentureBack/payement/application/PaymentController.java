@@ -6,12 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.keca.AirVentureBack.payement.domain.dto.CreatePayment;
-import com.keca.AirVentureBack.payement.domain.dto.CreatePaymentItem;
+
 import com.keca.AirVentureBack.payement.domain.dto.CreatePaymentResponse;
-import com.keca.AirVentureBack.reservation.domain.entity.FinalReservation;
 import com.keca.AirVentureBack.reservation.domain.entity.PreReservation;
-import com.keca.AirVentureBack.reservation.domain.service.FinalReservationService;
 import com.keca.AirVentureBack.reservation.domain.service.PreReservationService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;

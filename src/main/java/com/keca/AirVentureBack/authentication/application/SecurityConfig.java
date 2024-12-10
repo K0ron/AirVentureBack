@@ -11,51 +11,46 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+        public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+                this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public BCryptPasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((requests) -> requests
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .authorizeHttpRequests((requests) -> requests
 
-                        .requestMatchers("/login", "/register", "/logged-out").permitAll()
-                        .requestMatchers("/v3/api-docs",
-                                "/swagger-resources/**",
-                                "/swagger-ui/index.html",
-                                "/webjars/**")
-                        .permitAll()
-                        .anyRequest().authenticated()
+                                                .requestMatchers("/login", "/register", "/logged-out").permitAll()
+                                                .requestMatchers("/v3/api-docs",
+                                                                "/swagger-resources/**",
+                                                                "/swagger-ui/index.html",
+                                                                "/webjars/**")
+                                                .permitAll()
+                                                .anyRequest().authenticated())
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .logoutSuccessUrl("/logged-out")
+                                                .invalidateHttpSession(true)
+                                                .deleteCookies("token")
+                                                .permitAll())
 
-                // .requestMatchers("/user", "/user/**", "/password-change/**",
-                // "avatar/**").authenticated()
+                                .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) 
+                                                .ignoringRequestMatchers("/register", "/login", "/logged-out")
+                                                .disable() 
+                                )
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/logged-out")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("token")
-                        .permitAll())
+                http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-                .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // withHttpOnlyTrue()
-                        .ignoringRequestMatchers("/register", "/login", "/logged-out")
-                        .disable() // Décommentez pour désactiver en entier la protection CSRF en développement
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
+                return http.build();
+        }
 
 }
