@@ -39,7 +39,7 @@ public class UserControllerTest {
 
     @Test
     public void testGetOne() throws Exception {
-        Long id = 2L;
+        Long id = 1L;
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/user/{id}", id)
                         .cookie(new Cookie("token", generateAuthToken()))

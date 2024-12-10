@@ -37,6 +37,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
     @ManyToMany
     @JoinTable(name = "users_pre_reservation", joinColumns = @JoinColumn(name = "users_id"), inverseJoinColumns = @JoinColumn(name = "pre_reservation_id"))
     private Set<PreReservation> preReservations = new HashSet<>();
@@ -162,6 +165,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true; // Modifiez si vous avez une logique pour désactiver les comptes
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
 }
