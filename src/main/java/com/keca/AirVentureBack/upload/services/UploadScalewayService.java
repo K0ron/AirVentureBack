@@ -79,13 +79,6 @@ public class UploadScalewayService {
         return fileUrls;
     }
     
-
-
-    
-
-    
-
-
     public File convertToFile(MultipartFile multipartFile) throws IOException {
         File file = new File(System.getProperty("java.io.tmpdir") + "/" + multipartFile.getOriginalFilename());
         multipartFile.transferTo(file);
