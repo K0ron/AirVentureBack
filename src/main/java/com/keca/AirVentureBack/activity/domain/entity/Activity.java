@@ -57,9 +57,12 @@ public class Activity {
     private Set<Review> reviews = new HashSet<>();
 
     public enum Category {
-        SPORT,
-        EXTERIEUR,
-        DECOUVERTE
+        AERIEN, 
+        NEIGE,
+        AQUATIQUE,
+        NATURE,
+        PILOTAGE,
+        URBAIN
     }
 
     public Integer getPrice() {
