@@ -1,7 +1,7 @@
 services:
   air-venture-db:
     container_name: air-venture-db
-    image: mysql
+    image: mysql:8.0
     platform: linux/arm64
     env_file:
       - .env
@@ -9,6 +9,7 @@ services:
       - "3307:3306"
     volumes:
       - air-venture-db:/var/lib/mysql
+
   app:
     build:
       context: .
@@ -25,7 +26,7 @@ services:
       - .:/app
       - ~/.m2:/root/.m2
     environment:
-      - JAVA_OPTS=-XX:+UseSerialGC -XX:-UseCompressedOops -XX:UseSVE=0
+      - JAVA_OPTS=-XX:+UseSerialGC -XX:-UseCompressedOops -XX:UseSVE=0 # Options de performance Java
 
 volumes:
   air-venture-db:

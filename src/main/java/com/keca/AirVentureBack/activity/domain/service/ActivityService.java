@@ -3,6 +3,7 @@ package com.keca.AirVentureBack.activity.domain.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.keca.AirVentureBack.activity.domain.entity.Activity;
 import com.keca.AirVentureBack.activity.infrastructure.repository.ActivityRepository;
@@ -61,6 +62,10 @@ public class ActivityService {
             .orElseThrow(() -> new RuntimeException("Activity not found"));
     
         return activity.getPictures(); // Récupère les URLs
+    }
+
+    public List<Activity> getActivitiesByCategory(@PathVariable String category) {
+        return activityRepository.findByCategory(category);
     }
     
 

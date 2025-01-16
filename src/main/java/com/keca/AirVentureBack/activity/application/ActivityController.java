@@ -82,6 +82,11 @@ public class ActivityController {
 
     }
 
+    @GetMapping("activities/category/{category}")
+    public List<Activity> getActivitiesByCategory(@PathVariable String category) {
+        return activityService.getActivitiesByCategory(category);
+    }
+
 }
 
 
