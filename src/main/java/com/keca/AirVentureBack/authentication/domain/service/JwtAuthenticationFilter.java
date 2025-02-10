@@ -40,6 +40,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .map(Cookie::getValue)
                     .orElse(null);
 
+            logger.info("Token extracted: " + token);
+
+
             if (token == null) {
                 filterChain.doFilter(request, response);
                 return;
@@ -57,6 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
                 }
             }
         } catch (Exception e) {

@@ -49,7 +49,7 @@ public class UserRegisterService {
     }
 
     private boolean isPasswordValid(String password) {
-        String passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,}$";
+        String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()\\-_=+\\{\\}\\[\\]|\\\\:;\"'<>,.?/]).{8,}$";
         return password.matches(passwordPattern);
     }
 

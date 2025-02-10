@@ -34,6 +34,9 @@ public class Review {
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
+    @Column(name = "rating", nullable = false) 
+    private int rating; 
+
     public Long getId() {
         return id;
     }
@@ -82,4 +85,11 @@ public class Review {
         this.activity = activity;
     }
 
+    public int getRating() { 
+        return rating;
+    }
+
+    public void setRating(int rating) { 
+        this.rating = rating;
+    }
 }

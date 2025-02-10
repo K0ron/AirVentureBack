@@ -37,3 +37,7 @@ build/
 
 ### JSON Googl Storage ### 
 
+# Mkcert 
+localhost.pem
+localhost-key.pem
+
