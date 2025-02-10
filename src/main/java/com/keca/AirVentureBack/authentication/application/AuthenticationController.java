@@ -1,5 +1,7 @@
 package com.keca.AirVentureBack.authentication.application;
 
+import com.keca.AirVentureBack.authentication.domain.dto.CurrentUserDTO;
+import com.keca.AirVentureBack.authentication.domain.dto.UserPrincipal;
 import com.keca.AirVentureBack.authentication.domain.entity.Token;
 import com.keca.AirVentureBack.authentication.domain.service.JwtTokenService;
 import com.keca.AirVentureBack.authentication.domain.service.UserDetailsServiceImpl;
@@ -8,10 +10,17 @@ import com.keca.AirVentureBack.authentication.domain.service.UserRegisterService
 import com.keca.AirVentureBack.user.domain.dto.UserIdDTO;
 import com.keca.AirVentureBack.user.domain.entity.User;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,43 +46,51 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody User userBody) throws Exception {
-        logger.info("Loggin attemp for email: {}", userBody.getEmail());
-
         try {
             userLoginService.login(userBody);
-            logger.info("Authentication successful for email: {}", userBody.getEmail()); // Étape 2
             Token token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getEmail()));
-            logger.info("JWT generated for email: {}", userBody.getEmail()); // Étape 3
-            logger.debug("JWT content: {}", token.getToken()); // Debug pour voir le contenu
             User user = userLoginService.getUserEntityByEmail(userBody.getEmail());
-            ResponseCookie jwtCookie = ResponseCookie.from("token", token.getToken())
-                    .httpOnly(true)
-                    .path("/")
-                    .maxAge(60 * 60)
-                    .sameSite("Strict")
-                    .build();
-            logger.info("JWT cookie created for email: {}", userBody.getEmail()); // Étape 4
+            
+            // Créer le cookie avec la configuration appropriée
+            Cookie jwtCookie = new Cookie("token", token.getToken());
+            jwtCookie.setHttpOnly(true);  
+            jwtCookie.setSecure(true);    
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(24 * 60 * 60); 
+            jwtCookie.setDomain("localhost");
+
+            
+            
             UserIdDTO userBodyDTO = new UserIdDTO();
             userBodyDTO.setId(user.getId());
-            logger.info("Login response ready for email: {}", userBody.getEmail()); // Étape 5
+            
+            // Ajouter le cookie à la réponse
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Set-Cookie", String.format("token=%s; Path=/; Max-Age=%d; SameSite=none; Secure=true", 
+                token.getToken(), 24 * 60 * 60));
+            
             return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                    .body(userBodyDTO); // cette ligne renvoie le DTO dans le body
-            /* .build(); */
+                    .headers(headers)
+                    .body(Map.of(
+                        "id", user.getId(),
+                        "token", token.getToken()
+                    ));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid email or password");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occured durieng authentication");
+                    .body("An error occurred during authentication");
         }
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User userBody) throws Exception {
         try {
             return ResponseEntity.status(201).body(userRegisterService.UserRegister(userBody));
         } catch (BadCredentialsException e) {
+            logger.error("Invalid credentials: " + e.getMessage());
             return ResponseEntity.status(400).build();
         }
     }
@@ -83,6 +100,24 @@ public class AuthenticationController {
         model.addAttribute("logout", "You logged out!");
         return "Logged out 👌🏽";
 
+    }
+
+    @GetMapping("/auth/me")
+    public ResponseEntity<CurrentUserDTO> getCurrentUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        if (userPrincipal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        User user = userPrincipal.getUser();
+
+        CurrentUserDTO currentUserDTO = new CurrentUserDTO();
+        currentUserDTO.setId(user.getId());
+        currentUserDTO.setFirstName(user.getFirstName());
+        currentUserDTO.setLastName(user.getLastName());
+        currentUserDTO.setEmail(user.getEmail());
+        currentUserDTO.setRole(user.getRole());
+
+        return ResponseEntity.ok(currentUserDTO);
     }
 
 }
