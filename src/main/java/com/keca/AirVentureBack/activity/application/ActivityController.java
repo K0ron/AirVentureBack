@@ -2,17 +2,24 @@ package com.keca.AirVentureBack.activity.application;
 
 import com.keca.AirVentureBack.activity.domain.entity.Activity;
 import com.keca.AirVentureBack.activity.domain.service.ActivityService;
+import com.keca.AirVentureBack.authentication.application.AuthenticationController;
 import com.keca.AirVentureBack.upload.services.UploadScalewayService;
 
-
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class ActivityController {
@@ -24,6 +31,9 @@ public class ActivityController {
         this.activityService = activityService;
        this.uploadScalewayService = uploadScalewayService;
     }
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
+
 
     @GetMapping("/activities")
     List<Activity> getAll() {
@@ -60,10 +70,14 @@ public class ActivityController {
             try {
                 List<MultipartFile> fileList = Arrays.asList(files);
                 List<String> fileUrls = uploadScalewayService.uploadFiles(fileList, activityId, "activities");
-
+                
                 activityService.addActivityPictures(activityId, fileUrls);
 
+                
+                
                 return ResponseEntity.ok(fileUrls);
+                
+                
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Collections.singletonList("Error: " + e.getMessage()));
@@ -74,6 +88,7 @@ public class ActivityController {
     public ResponseEntity<List<String>> getActivityPictures(@PathVariable("id") Long activityId) {
         try {
             List<String> pictures = activityService.getActivityPictures(activityId);
+            logger.info("Activity pictures: " + pictures);
             return ResponseEntity.ok(pictures);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -85,6 +100,25 @@ public class ActivityController {
     @GetMapping("activities/category/{category}")
     public List<Activity> getActivitiesByCategory(@PathVariable String category) {
         return activityService.getActivitiesByCategory(category);
+    }
+
+
+    @DeleteMapping("activity/{id}/delete-picture/{imageUrl}")
+    public String deletePicture(@PathVariable String imageUrl, @PathVariable Long id) {
+        try {
+
+            String decodedUrl = URLDecoder.decode(imageUrl, StandardCharsets.UTF_8);
+
+            String key = decodedUrl.replace("https://images-airventure.s3.fr-par.scw.cloud/", "");
+            uploadScalewayService.deleteImage(key);
+
+            activityService.removePictureFromActivity(id, decodedUrl);
+
+            return "Image supprimée avec succès : " + key;
+        } catch (Exception e) {
+            return "Erreur lors de la suppression de l'image : " + e.getMessage();
+        }
+      
     }
 
 }

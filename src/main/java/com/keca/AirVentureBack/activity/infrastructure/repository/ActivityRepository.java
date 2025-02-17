@@ -14,7 +14,8 @@ import org.springframework.data.repository.query.Param;
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
-    @Query(value = "SELECT * FROM air_venture_prod.activity WHERE category = :category", nativeQuery = true)
+    @Query(value = "SELECT * FROM air_venture_docker.activity WHERE category = :category", nativeQuery = true)
     public List<Activity> findByCategory(@Param("category") String category);
+
 
 }

@@ -25,6 +25,12 @@ public class FinalReservation {
     @Column(name = "payement_date", nullable = false)
     private Date payementDate = new Date();
 
+    @Column(name = "participants", nullable = false)
+    private int participants;
+
+    @Column(name = "date_of_activity", nullable = false)
+    private Date dateOfActivity = new Date();
+
     @ManyToMany(mappedBy = "finalReservations")
     private Set<User> users = new HashSet<>();
 
@@ -96,5 +102,23 @@ public class FinalReservation {
     public void setPayementDate(Date payementDate) {
         this.payementDate = payementDate;
     }
+
+    public int getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(int participants) {
+        this.participants = participants;
+    }
+
+
+    public Date getDateOfActivity() {
+        return dateOfActivity;
+    }
+
+    public void setDateOfActivity(Date dateOfActivity) {
+        this.dateOfActivity = dateOfActivity;
+    }
+    
 
 }

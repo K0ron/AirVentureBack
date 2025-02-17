@@ -1,6 +1,6 @@
 services:
   air-venture-db:
-    container_name: air-venture-db
+    container_name: air-venture-db-docker
     image: mysql:8.0
     platform: linux/arm64
     env_file:
@@ -8,7 +8,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - air-venture-db:/var/lib/mysql
+      - air-venture-db-docker:/var/lib/mysql
 
   app:
     build:
@@ -29,4 +29,4 @@ services:
       - JAVA_OPTS=-XX:+UseSerialGC -XX:-UseCompressedOops -XX:UseSVE=0 # Options de performance Java
 
 volumes:
-  air-venture-db:
+  air-venture-db-docker:

@@ -17,6 +17,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 
@@ -61,7 +62,7 @@ public class UploadScalewayService {
             );
             
             // Retourner l'URL du fichier
-            return "https://" + bucketName + ".scw.cloud/" + key;
+            return "https://" + bucketName + ".s3.fr-par.scw.cloud/" + key;
         } catch (IOException e) {
             throw new RuntimeException("Erreur lors du téléchargement du fichier : " + e.getMessage(), e);
         }
@@ -85,4 +86,20 @@ public class UploadScalewayService {
         return file;
     }
 
+
+    public void deleteImage(String key) {
+        try {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+            .bucket(bucketName)
+            .key(key)
+            .build();
+    
+            s3Client.deleteObject(deleteObjectRequest);
+            System.out.println("L'image a été supprimée : " + key);
+            
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la suppression de l'image : " + e.getMessage());
+            e.printStackTrace();
+    }
+    }
 }
