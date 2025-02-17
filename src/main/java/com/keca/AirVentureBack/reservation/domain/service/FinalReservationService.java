@@ -26,10 +26,9 @@ public class FinalReservationService {
     }
 
     public FinalReservation createFinalRerservation(FinalReservation newFinalReservation) {
-
         return finalReservationRepository.save(newFinalReservation);
-
     }
+
 
     public FinalReservation updateFinalReservation(FinalReservation updateFinalReservation, Long id) {
         return finalReservationRepository.findById(id)
@@ -38,6 +37,8 @@ public class FinalReservationService {
                     finalReservation.setReservedAt(updateFinalReservation.getReservedAt());
                     finalReservation.setStatus(updateFinalReservation.getStatus());
                     finalReservation.setTotalPrice(updateFinalReservation.getTotalPrice());
+                    finalReservation.setParticipants(updateFinalReservation.getParticipants());
+                    finalReservation.setDateOfActivity(updateFinalReservation.getDateOfActivity());
                     return finalReservationRepository.save(finalReservation);
                 })
                 .orElseThrow();

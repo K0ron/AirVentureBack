@@ -95,7 +95,7 @@ public class ActivityControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.duration").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.maxParticipants").value(5))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(100))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.category").value("EXTERIEUR"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.category").value("AQUATIQUE"));
     }
 
  

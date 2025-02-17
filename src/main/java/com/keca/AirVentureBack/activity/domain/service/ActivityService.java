@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.keca.AirVentureBack.activity.domain.entity.Activity;
 import com.keca.AirVentureBack.activity.infrastructure.repository.ActivityRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ActivityService {
 
@@ -68,5 +70,15 @@ public class ActivityService {
         return activityRepository.findByCategory(category);
     }
     
+    @Transactional
+    public void removePictureFromActivity(Long activityId, String imageUrl){
+        Activity activity = activityRepository.findById(activityId)
+        .orElseThrow(() -> new RuntimeException("Activity not found"));
+
+        activity.getPictures().remove(imageUrl);
+        activityRepository.save(activity);
+
+
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.keca.AirVentureBack.reservation.domain.entity;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -24,6 +26,12 @@ public class PreReservation {
 
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
+
+    @Column(name = "participants", nullable = false)
+    private int participants;
+
+    @Column(name = "date_of_activity", nullable = false)
+    private Date dateOfActivity = new Date();
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -97,5 +105,25 @@ public class PreReservation {
     public void setActivities(Set<Activity> activities) {
         this.activities = activities;
     }
+
+    public int getParticipants() {
+        return participants;
+    }
+
+    public void setParticipants(int participants) {
+        this.participants = participants;
+    }
+
+    public Date getDateOfActivity() {
+        return dateOfActivity;
+    }
+
+    public void setDateOfActivity(Date dateOfActivity) {
+        this.dateOfActivity = dateOfActivity;
+    }
+
+    
+
+    
 
 }
