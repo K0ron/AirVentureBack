@@ -23,7 +23,7 @@ public class PreReservationController {
     }
 
     @GetMapping("/preReservation/{id}")
-    PreReservation gerOnePreReservation(@PathVariable Long id) {
+    PreReservation getOnePreReservation(@PathVariable Long id) {
         return preReservationService.getOnePreReservation(id);
     }
 

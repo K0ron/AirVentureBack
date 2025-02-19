@@ -130,9 +130,9 @@
 
 		<!-- PAYEMENT -->
 		<dependency>
-		<groupId>com.stripe</groupId>
+			<groupId>com.stripe</groupId>
 			<artifactId>stripe-java</artifactId>
-			<version>28.1.0</version>
+			<version>28.3.1</version>
 		</dependency>
 		
 		<!-- SCALEWAY -->
