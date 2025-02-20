@@ -34,15 +34,28 @@ public class UserService {
         return userRepository.findById(id).orElseThrow();
     }
 
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public User updateUser(User updateUser, Long id) {
         return userRepository.findById(id)
                 .map(user -> {
-                    user.setFirstName(updateUser.getFirstName());
-                    user.setLastName(updateUser.getLastName());
-                    user.setEmail(updateUser.getEmail());
+                    if (updateUser.getFirstName() != null) {
+                        user.setFirstName(updateUser.getFirstName());
+                    }
+                    if (updateUser.getLastName() != null) {
+                        user.setLastName(updateUser.getLastName());
+                    }
+                    if (updateUser.getEmail() != null) {
+                        user.setEmail(updateUser.getEmail());
+                    }
+                    if (updateUser.getCity() != null) {
+                        user.setCity(updateUser.getCity());
+                    }
                     return userRepository.save(user);
                 })
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
     }
 
     public void deleteUSer(Long id) {

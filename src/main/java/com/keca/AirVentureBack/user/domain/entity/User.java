@@ -2,9 +2,8 @@ package com.keca.AirVentureBack.user.domain.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +26,12 @@ public class User implements UserDetails {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "date_of_birth", nullable = true)
+    private Date dateOfBirth = new Date();
+
+    @Column(name= "city", nullable = true)
+    private String city;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -174,5 +179,23 @@ public class User implements UserDetails {
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    
 
 }

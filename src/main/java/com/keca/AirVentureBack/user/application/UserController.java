@@ -43,8 +43,18 @@ public class UserController {
         return userService.getOneUser(id);
     }
 
+    @GetMapping("/user/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
+        if( user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        return ResponseEntity.ok(user);
+    }
+    
+
     @PutMapping("/user/{id}")
-    User edit(@RequestBody User updateUser, @PathVariable Long id) {
+    User update(@RequestBody User updateUser, @PathVariable Long id) {
         return userService.updateUser(updateUser, id);
     }
 
@@ -54,7 +64,7 @@ public class UserController {
     }
 
     @PutMapping("/password-change/{id}")
-    public ResponseEntity<?> editPassword(@RequestBody UserPasswordChangeDTO userPasswordChangeDTO,
+    public ResponseEntity<?> updatePassword(@RequestBody UserPasswordChangeDTO userPasswordChangeDTO,
             @PathVariable Long id) {
         try {
             User updateUser = userService.changePasswordWithAuthentication(userPasswordChangeDTO, id);
