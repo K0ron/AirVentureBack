@@ -19,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -96,10 +97,10 @@ public class AuthenticationController {
     }
 
     @GetMapping("/logged-out")
-    public String loggedOut(Model model) {
-        model.addAttribute("logout", "You logged out!");
-        return "Logged out 👌🏽";
-
+    public ResponseEntity<Map<String, String>> loggedOut() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Logged out successfully");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/auth/me")
