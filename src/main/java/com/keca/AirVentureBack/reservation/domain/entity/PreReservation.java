@@ -1,6 +1,5 @@
 package com.keca.AirVentureBack.reservation.domain.entity;
 
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
 import java.util.*;

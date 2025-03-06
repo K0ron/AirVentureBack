@@ -9,17 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import com.keca.AirVentureBack.activity.domain.entity.Activity;
 import com.keca.AirVentureBack.reservation.domain.entity.PreReservation;
 import com.keca.AirVentureBack.user.domain.entity.User;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@TestPropertySource(locations = "classpath:application-test.properties")
 public class PreReservationTest {
     private PreReservation preReservation;
 

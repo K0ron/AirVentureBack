@@ -9,66 +9,50 @@ jobs:
   build-deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping --silent"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-        env:
-          MYSQL_ROOT_PASSWORD: surf
-          MYSQL_DATABASE: air_venture_db_test
 
     steps:
+      # Étape 1 : Récupérer le code source
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Étape 2 : Installer Java
       - uses: actions/setup-java@v4
         with:
           distribution: "corretto"
           java-version: "21"
 
-      - name: Wait for MySQL to be ready
-        run: |
-          echo "Waiting for MySQL to be ready..."
-          for i in {1..30}; do
-            if mysqladmin ping -h 127.0.0.1 --silent; then
-              echo "MySQL is ready!"
-              break
-            fi
-            echo "Waiting for MySQL to be ready..."
-            sleep 5
-          done
-
+      # Étape 3 : Tester la connexion MySQL (si tu en as besoin pour autre chose, sinon tu peux la retirer)
       - name: Test MySQL Connection (Manual Check)
         run: |
           echo "Testing MySQL connection..."
           mysql -h 127.0.0.1 -u root -psurf -e "SELECT 1"
-
+      
+      # Étape 4 : Exécuter les tests unitaires avec H2 comme base de données en mémoire
       - name: Unit tests
         env:
-          SPRING_DATASOURCE_URL: "jdbc:mysql://127.0.0.1:3306/air_venture_db_test"
-          SPRING_DATASOURCE_USERNAME: "root"
-          SPRING_DATASOURCE_PASSWORD: "surf"
+          SPRING_DATASOURCE_URL: "jdbc:h2:mem:air_venture_test;DB_CLOSE_DELAY=-1"
+          SPRING_DATASOURCE_DRIVER_CLASSNAME: "org.h2.Driver"
+          SPRING_DATASOURCE_USERNAME: "sa"
+          SPRING_DATASOURCE_PASSWORD: ""
           SPRING_PROFILES_ACTIVE: test
         run: mvn -B test --file pom.xml
 
+      # Étape 5 : Construire l'application
       - name: Build the application
         run: mvn -B package --file pom.xml
 
+      # Étape 6 : Connexion à Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Étape 7 : Configuration de Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # Étape 8 : Build et push de l'image Docker
       - name: Build and push
         uses: docker/build-push-action@v5
         with:

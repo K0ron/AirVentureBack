@@ -88,6 +88,7 @@ public class UploadScalewayService {
 
 
     public void deleteImage(String key) {
+        
         try {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
             .bucket(bucketName)
