@@ -9,12 +9,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.keca.AirVentureBack.activity.domain.entity.Review;
 import com.keca.AirVentureBack.reservation.domain.entity.FinalReservation;
 import com.keca.AirVentureBack.reservation.domain.entity.PreReservation;
 
 @Entity
 @Table(name = "users")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements UserDetails {
 
     @Id

@@ -103,4 +103,10 @@ public class UploadScalewayService {
             e.printStackTrace();
     }
     }
+
+
+    // public Object uploadFiles(List<MultipartFile> anyList, String anyString, String anyString2) {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'uploadFiles'");
+    // }
 }

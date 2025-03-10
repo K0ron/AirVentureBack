@@ -2,6 +2,8 @@ package com.keca.AirVentureBack.authentication.domain.service;
 
 import com.keca.AirVentureBack.authentication.domain.dto.UserPrincipal;
 import com.keca.AirVentureBack.authentication.infrastructure.repository.UserRepository;
+import com.keca.AirVentureBack.user.domain.entity.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return new UserPrincipal(userRepository.findByEmail(email));
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+        return new UserPrincipal(user);
     }
 }

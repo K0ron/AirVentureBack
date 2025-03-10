@@ -2,11 +2,10 @@ package com.keca.AirVentureBack;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.keca.AirVentureBack")
 public class AirVentureBackApplication {
 	private static final Logger logger = LoggerFactory.getLogger(AirVentureBackApplication.class);
 

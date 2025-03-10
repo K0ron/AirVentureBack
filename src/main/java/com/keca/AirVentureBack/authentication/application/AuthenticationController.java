@@ -7,18 +7,19 @@ import com.keca.AirVentureBack.authentication.domain.service.JwtTokenService;
 import com.keca.AirVentureBack.authentication.domain.service.UserDetailsServiceImpl;
 import com.keca.AirVentureBack.authentication.domain.service.UserLoginService;
 import com.keca.AirVentureBack.authentication.domain.service.UserRegisterService;
+import com.keca.AirVentureBack.user.domain.dto.UserDTO;
 import com.keca.AirVentureBack.user.domain.dto.UserIdDTO;
 import com.keca.AirVentureBack.user.domain.entity.User;
 
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,10 +49,34 @@ public class AuthenticationController {
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody User userBody) throws Exception {
         try {
-            userLoginService.login(userBody);
-            Token token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getEmail()));
+            // Vérification des champs manquants dans le corps de la requête
+            if (userBody.getEmail() == null || userBody.getEmail().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Email is required");
+            }
+            if (userBody.getPassword() == null || userBody.getPassword().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Password is required");
+            }
+    
+            // Authentifier l'utilisateur
             User user = userLoginService.getUserEntityByEmail(userBody.getEmail());
             
+            // Vérification des informations d'identification incorrectes
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Invalid email or password");
+            }
+    
+            // Vérifier que le mot de passe est correct
+            if (!userLoginService.checkPassword(userBody.getPassword(), user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Invalid email or password");
+            }
+    
+            // Générer le token pour l'utilisateur authentifié
+            Token token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(user.getEmail()));
+        
             // Créer le cookie avec la configuration appropriée
             Cookie jwtCookie = new Cookie("token", token.getToken());
             jwtCookie.setHttpOnly(true);  
@@ -59,17 +84,17 @@ public class AuthenticationController {
             jwtCookie.setPath("/");
             jwtCookie.setMaxAge(24 * 60 * 60); 
             jwtCookie.setDomain("localhost");
-
-            
-            
+        
+            // Créer un DTO pour l'utilisateur avec l'ID
             UserIdDTO userBodyDTO = new UserIdDTO();
             userBodyDTO.setId(user.getId());
-            
+                
             // Ajouter le cookie à la réponse
             HttpHeaders headers = new HttpHeaders();
             headers.add("Set-Cookie", String.format("token=%s; Path=/; Max-Age=%d; SameSite=none; Secure=true", 
                 token.getToken(), 24 * 60 * 60));
-            
+                
+            // Retourner la réponse avec l'utilisateur et le token
             return ResponseEntity.ok()
                     .headers(headers)
                     .body(Map.of(
@@ -77,24 +102,51 @@ public class AuthenticationController {
                         "token", token.getToken()
                     ));
         } catch (BadCredentialsException e) {
+            // Gestion des erreurs de mauvaise authentification
+            logger.error("Invalid credentials provided", e);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid email or password");
         } catch (Exception e) {
+            // Gestion des autres erreurs génériques
+            logger.error("An error occurred during authentication", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred during authentication");
         }
     }
+    
+    
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User userBody) throws Exception {
-        try {
-            return ResponseEntity.status(201).body(userRegisterService.UserRegister(userBody));
-        } catch (BadCredentialsException e) {
-            logger.error("Invalid credentials: " + e.getMessage());
-            return ResponseEntity.status(400).build();
+public ResponseEntity<?> register(@RequestBody User userBody) {
+    try {
+        // Vérification de l'email vide
+        if (userBody.getEmail() == null || userBody.getEmail().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "Email is required"));
         }
+
+        // Vérification du mot de passe vide
+        if (userBody.getPassword() == null || userBody.getPassword().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "Password is required"));
+        }
+
+        // Appel au service pour l'enregistrement
+        UserDTO createdUser = userRegisterService.UserRegister(userBody);
+        return ResponseEntity.status(201).body(createdUser);  // Succès de la création
+    } catch (IllegalArgumentException e) {
+        // Cas où l'email existe déjà
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", e.getMessage()));
+    } catch (ResponseStatusException e) {
+        // Cas de validation de mot de passe ou autres exceptions de validation
+        return ResponseEntity.status(e.getStatusCode()).body(Collections.singletonMap("message", e.getMessage()));
+    } catch (Exception e) {
+        // Gestion d'erreurs internes
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "An unexpected error occurred"));
     }
+}
+
+
+
 
     @GetMapping("/logged-out")
     public ResponseEntity<Map<String, String>> loggedOut() {

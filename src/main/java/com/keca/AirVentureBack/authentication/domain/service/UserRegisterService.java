@@ -26,6 +26,15 @@ public class UserRegisterService {
 
     public UserDTO UserRegister(User userData) {
 
+        if (userData.getEmail() == null || userData.getEmail().isEmpty()) {
+            
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is required");
+        }
+
+        if (userData.getPassword() == null || userData.getPassword().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is required");
+        }
+
         if (userRepository.existsByEmail(userData.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }

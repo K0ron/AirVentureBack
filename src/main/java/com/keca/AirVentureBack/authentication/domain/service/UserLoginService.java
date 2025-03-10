@@ -20,6 +20,10 @@ public class UserLoginService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
+    }
+
     // public User login(User user) {
     // User userEntity = getUserEntityByEmail(user.getEmail());
     // if (!verifyHashedPasswordDuringLogin(user.getPassword(),

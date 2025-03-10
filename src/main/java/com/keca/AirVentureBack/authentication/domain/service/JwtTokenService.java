@@ -35,6 +35,8 @@ public class JwtTokenService {
                 .setExpiration(new Date(now.getTime() + JWT_TOKENT_VALIDITY * 1000))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact());
+                System.out.println("Generated Token: " + token.getToken());
+
         return token;
     }
 
