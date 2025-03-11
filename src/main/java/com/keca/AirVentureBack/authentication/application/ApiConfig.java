@@ -11,7 +11,7 @@ public class ApiConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("https://localhost:4200")
+            .allowedOrigins("https://localhost:4200", "https://www.airventures.ovh")
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true);
