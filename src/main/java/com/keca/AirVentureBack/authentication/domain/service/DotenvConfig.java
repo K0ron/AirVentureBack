@@ -9,7 +9,7 @@ public class DotenvConfig {
 
     @Bean
     public Dotenv dotenv() {
-        Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = Dotenv.configure().directory("/app").load();
         dotenv.entries().forEach(entry -> {
             System.setProperty(entry.getKey(), entry.getValue());
             System.out.println("Loaded env variable: " + entry.getKey() + " = " + entry.getValue());
