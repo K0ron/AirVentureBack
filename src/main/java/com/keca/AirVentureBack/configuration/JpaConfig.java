@@ -34,8 +34,8 @@ public class JpaConfig {
     @Value("${spring.datasource.password}")
     private String datasourcePassword;
 
-    @Value("${spring.datasource.driver-class-name}")
-    private String driverClassName;
+    // @Value("${spring.datasource.driver-class-name}")
+    // private String driverClassName;
 
     @Value("${spring.jpa.hibernate.ddl-auto}")
     private String hibernateDdlAuto;
@@ -51,13 +51,13 @@ public class JpaConfig {
     public DataSource dataSource() {
         System.out.println("Datasource URL: " + datasourceUrl);
         System.out.println("Datasource Username: " + datasourceUsername);
-        System.out.println("Datasource Driver: " + driverClassName);
+        //System.out.println("Datasource Driver: " + driverClassName);
         
         return DataSourceBuilder.create()
             .url(datasourceUrl)
             .username(datasourceUsername)
             .password(datasourcePassword)
-            .driverClassName(driverClassName)
+            //.driverClassName(driverClassName)
             .build();
     }
 
