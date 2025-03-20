@@ -7,11 +7,16 @@ WORKDIR /app
 # Copier tout le code source du projet dans le conteneur
 COPY . .
 
+RUN chmod +x ./mvnw
+
+RUN ./mvnw dependency:resolve
+
 # Construire le .jar à partir du code source
 RUN ./mvnw clean install -DskipTests
 
 # Spécifier le fichier .jar à exécuter dans l'image (mettre à jour avec ton nom de fichier .jar)
 CMD ["java", "-jar", "/app/target/AirVentureBack-0.0.1-SNAPSHOT.jar"]
+
 
 
 

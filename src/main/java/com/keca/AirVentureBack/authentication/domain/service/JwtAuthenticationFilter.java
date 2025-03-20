@@ -28,11 +28,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    @Override
-protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
-    String path = request.getRequestURI();
-    return path.equals("/register") || path.equals("/login") || path.equals("/logged-out");
-}
+    // @Override
+    // protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
+    //     String path = request.getRequestURI();
+    //     return path.equals("/register") || path.equals("/login") || path.equals("/logged-out");
+    // }
 
 
     @Override
@@ -40,6 +40,15 @@ protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws Se
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
+
+                if ("OPTIONS".equals(request.getMethod())) {
+                    filterChain.doFilter(request, response);
+                    logger.info("✅ OPTIONS request allowed");
+                    return;
+                } else {
+                    logger.info("❌ Non-OPTIONS request allowed");
+                }
+
         try {
             final String token = Arrays.stream(request.getCookies() != null ? request.getCookies() : new Cookie[0])
                     .filter(cookie -> "token".equals(cookie.getName()))

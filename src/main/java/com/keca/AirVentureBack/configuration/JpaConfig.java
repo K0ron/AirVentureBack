@@ -16,8 +16,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -33,7 +31,7 @@ public class JpaConfig {
 
     @Value("${spring.datasource.password}")
     private String datasourcePassword;
-
+    /// commenter en local /// 
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
 
@@ -51,12 +49,14 @@ public class JpaConfig {
     public DataSource dataSource() {
         System.out.println("Datasource URL: " + datasourceUrl);
         System.out.println("Datasource Username: " + datasourceUsername);
+         /// commenter en local /// 
         System.out.println("Datasource Driver: " + driverClassName);
         
         return DataSourceBuilder.create()
             .url(datasourceUrl)
             .username(datasourceUsername)
             .password(datasourcePassword)
+            /// commenter en local /// 
             .driverClassName(driverClassName)
             .build();
     }
@@ -86,5 +86,3 @@ public class JpaConfig {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }
-
-
