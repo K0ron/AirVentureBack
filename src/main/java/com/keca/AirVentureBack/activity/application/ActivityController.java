@@ -37,6 +37,7 @@ public class ActivityController {
 
     @GetMapping("/activities")
     List<Activity> getAll() {
+        logger.info("📢 /activities endpoint hit!");
         return activityService.getAllActivities();
     }
 

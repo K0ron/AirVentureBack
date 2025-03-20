@@ -22,6 +22,7 @@ public class JwtTokenService {
 
     public JwtTokenService(Dotenv dotenv) {
         this.secretKey = dotenv.get("SECRET_KEY");
+        System.out.println("SECRET_KEY loaded: " + secretKey);
     }
 
     private static final long JWT_TOKENT_VALIDITY = 5 * 60 * 60;

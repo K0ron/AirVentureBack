@@ -6,7 +6,8 @@ WORKDIR /app
 COPY . .
 RUN chmod +x ./mvnw
 RUN ./mvnw dependency:resolve
-CMD ["./mvnw", "spring-boot:run"]
+RUN ./mvnw package -DskipTests
+CMD ["java", "-jar", "target/airventure-back-0.0.1-SNAPSHOT.jar"]
 
 
 
