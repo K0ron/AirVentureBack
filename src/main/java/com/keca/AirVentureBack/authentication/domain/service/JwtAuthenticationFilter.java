@@ -28,11 +28,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    @Override
-protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
-    String path = request.getRequestURI();
-    return path.equals("/register") || path.equals("/login") || path.equals("/logged-out");
-}
+    // @Override
+    // protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
+    //     String path = request.getRequestURI();
+    //     return path.equals("/register") || path.equals("/login") || path.equals("/logged-out");
+    // }
 
 
     @Override

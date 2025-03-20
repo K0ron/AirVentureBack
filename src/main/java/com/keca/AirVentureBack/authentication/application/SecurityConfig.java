@@ -1,6 +1,9 @@
 package com.keca.AirVentureBack.authentication.application;
 
 import com.keca.AirVentureBack.authentication.domain.service.JwtAuthenticationFilter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,9 +14,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+
 @Configuration
 public class SecurityConfig {
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private static final Logger logger = LoggerFactory.getLogger(ApiConfig.class);
+
 
         public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
                 this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -26,10 +32,12 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                logger.info("✅ Security filter chain initialized");
+
                http
                .csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                                  .ignoringRequestMatchers("/register", "/login", "/logged-out", "/activities","activity/**")
-                                 .disable()) 
+                                 .disable())
                .authorizeHttpRequests(requests -> requests
                    .requestMatchers("/login", "/register", "/logged-out", "/activities","activity/**").permitAll()
                    .requestMatchers("/v3/api-docs", "/swagger-resources/**", "/swagger-ui/index.html", "/webjars/**").permitAll()
