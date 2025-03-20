@@ -7,15 +7,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+
 import org.springframework.lang.NonNull;
 
 @Configuration
 public class ApiConfig implements WebMvcConfigurer {
     private static final Logger logger = LoggerFactory.getLogger(ApiConfig.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(ApiConfig.class);
+    
+    
     @Override
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         String allowedOrigins = System.getenv("CORS_ALLOWED_ORIGINS");
+
 
         if (allowedOrigins == null || allowedOrigins.isEmpty()) {
             logger.error("⚠️ CORS_ALLOWED_ORIGINS is not set or empty!");
@@ -29,5 +35,5 @@ public class ApiConfig implements WebMvcConfigurer {
             .allowedHeaders("*")
             .allowCredentials(true);
     
-}
+    }
 }
